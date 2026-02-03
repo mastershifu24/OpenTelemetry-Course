@@ -29,6 +29,7 @@ logger = logging.getLogger("demo_app")
 
 for i in range(3):
     with tracer.start_as_current_span("process_request") as span:
+        span.set_attribute("request.iteration", i + 1)
         request_counter.add(1)
         logger.info(f"User login successful (iteration {i+1})")
         if i == 1:
