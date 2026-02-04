@@ -24,6 +24,10 @@ request_counter = meter.create_counter(
     name="http_requests_total",
 )
 
+error_counter = meter.create_counter(
+    name="https_errors_total",
+)
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("demo_app")
 
@@ -33,5 +37,6 @@ for i in range(3):
         request_counter.add(1)
         logger.info(f"User login successful (iteration {i+1})")
         if i == 1:
+            error_counter.add(1)
             logger.error("Database connection failed")
         time.sleep(0.5)
