@@ -25,7 +25,7 @@ request_counter = meter.create_counter(
 )
 
 error_counter = meter.create_counter(
-    name="https_errors_total",
+    name="http_errors_total",
 )
 
 logging.basicConfig(level=logging.INFO)
