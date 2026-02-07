@@ -28,11 +28,16 @@ error_counter = meter.create_counter(
     name="http_errors_total",
 )
 
+request_latency = meter.create_histogram(
+    name="http_request_duration_seconds"
+)
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("demo_app")
 
 for i in range(3):
     with tracer.start_as_current_span("process_request") as span:
+        start_time = time.time()
         span.set_attribute("request.iteration", i + 1)
         request_counter.add(1)
         logger.info(f"User login successful (iteration {i+1})")
@@ -40,3 +45,5 @@ for i in range(3):
             error_counter.add(1)
             logger.error("Database connection failed")
         time.sleep(0.5)
+        duration = time.time() - start_time
+        request_latency.record(duration)
